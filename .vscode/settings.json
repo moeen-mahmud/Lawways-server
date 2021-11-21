@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/6db83a9b-4fdc-437b-bcec-2c2f4cfb1fd5/resourceGroups/DefaultResourceGroup-SEA/providers/Microsoft.Web/sites/lawways-backend-server-moeen",
+  "appService.deploySubpath": "."
+}

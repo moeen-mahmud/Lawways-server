@@ -26,6 +26,7 @@ async function run() {
     const database = client.db("lawwaysDatabase");
     const lawyerCollection = database.collection("lawyers");
     const reviewCollection = database.collection("reviews");
+    const serviceCollection = database.collection("services");
 
     // GET all lawyers
     app.get("/lawyers", async (req, res) => {
@@ -37,6 +38,13 @@ async function run() {
     // GET all reviews
     app.get("/reviews", async (req, res) => {
       const cursor = reviewCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
+    });
+
+    // GET all services
+    app.get("/services", async (req, res) => {
+      const cursor = serviceCollection.find({});
       const result = await cursor.toArray();
       res.json(result);
     });
