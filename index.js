@@ -25,10 +25,18 @@ async function run() {
 
     const database = client.db("lawwaysDatabase");
     const lawyerCollection = database.collection("lawyers");
+    const reviewCollection = database.collection("reviews");
 
     // GET all lawyers
     app.get("/lawyers", async (req, res) => {
       const cursor = lawyerCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
+    });
+
+    // GET all reviews
+    app.get("/reviews", async (req, res) => {
+      const cursor = reviewCollection.find({});
       const result = await cursor.toArray();
       res.json(result);
     });
