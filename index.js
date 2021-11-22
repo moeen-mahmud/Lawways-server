@@ -48,6 +48,14 @@ async function run() {
       const result = await cursor.toArray();
       res.json(result);
     });
+
+    // GET service by id
+    app.get("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await serviceCollection.findOne(query);
+      res.json(result);
+    });
   } finally {
     // await client.close();
   }
