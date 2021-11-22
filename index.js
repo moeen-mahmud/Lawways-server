@@ -27,6 +27,7 @@ async function run() {
     const lawyerCollection = database.collection("lawyers");
     const reviewCollection = database.collection("reviews");
     const serviceCollection = database.collection("services");
+    const orderCollection = database.collection("orders");
 
     // GET all lawyers
     app.get("/lawyers", async (req, res) => {
@@ -54,6 +55,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await serviceCollection.findOne(query);
+      res.json(result);
+    });
+
+    // POST a order
+    app.post("/orders", async (req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
       res.json(result);
     });
   } finally {
