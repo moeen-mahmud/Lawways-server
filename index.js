@@ -57,6 +57,14 @@ async function run() {
       res.json(result);
     });
 
+    // DELETE a service
+    app.delete("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await serviceCollection.deleteOne(query);
+      res.json(result);
+    });
+
     // GET service by id
     app.get("/services/:id", async (req, res) => {
       const id = req.params.id;
