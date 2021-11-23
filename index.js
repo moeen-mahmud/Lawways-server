@@ -43,6 +43,13 @@ async function run() {
       res.json(result);
     });
 
+    // POST a review
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+      const result = await reviewCollection.insertOne(review);
+      res.json(result);
+    });
+
     // GET all services
     app.get("/services", async (req, res) => {
       const cursor = serviceCollection.find({});
