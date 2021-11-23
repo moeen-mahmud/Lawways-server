@@ -64,6 +64,21 @@ async function run() {
       const result = await orderCollection.insertOne(order);
       res.json(result);
     });
+
+    // GET the orders
+    app.get("/orders", async (req, res) => {
+      const email = req.query.email;
+      if (email) {
+        const query = { email: email };
+        const cursor = orderCollection.find(query);
+        const result = await cursor.toArray();
+        res.json(result);
+      } else {
+        const cursor = orderCollection.find({});
+        const result = await cursor.toArray();
+        res.json(result);
+      }
+    });
   } finally {
     // await client.close();
   }
