@@ -102,6 +102,21 @@ async function run() {
       const result = await orderCollection.deleteOne(query);
       res.json(result);
     });
+
+    // UPDATE or PUT order status
+    app.put("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateStatus = req.body;
+      const filter = { _id: ObjectId(id) };
+      const option = { upsert: true };
+      const updateDoc = {
+        $set: {
+          orderStatus: updateStatus.orderStatus,
+        },
+      };
+      const result = await orderCollection.updateOne(filter, updateDoc, option);
+      res.json(result);
+    });
   } finally {
     // await client.close();
   }
