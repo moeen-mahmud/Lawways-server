@@ -73,6 +73,13 @@ async function run() {
       res.json(result);
     });
 
+    // POST a service
+    app.post("/services", async (req, res) => {
+      const service = req.body;
+      const result = await serviceCollection.insertOne(service);
+      res.json(result);
+    });
+
     // POST a order
     app.post("/orders", async (req, res) => {
       const order = req.body;
