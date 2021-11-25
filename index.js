@@ -154,6 +154,20 @@ async function run() {
       res.json(result);
     });
 
+    // UPDATE or PUT payment status
+    app.put("/orders/payment/:id", async (req, res) => {
+      const id = req.params.id;
+      const payment = req.body;
+      const filter = { _id: ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          payment: payment,
+        },
+      };
+      const result = await orderCollection.updateOne(filter, updateDoc);
+      res.json(result);
+    });
+
     // POST or add a new user
     app.post("/users", async (req, res) => {
       const user = req.body;
