@@ -28,6 +28,7 @@ async function run() {
     const reviewCollection = database.collection("reviews");
     const serviceCollection = database.collection("services");
     const orderCollection = database.collection("orders");
+    const userCollection = database.collection("users");
 
     // GET all lawyers
     app.get("/lawyers", async (req, res) => {
@@ -122,6 +123,23 @@ async function run() {
         },
       };
       const result = await orderCollection.updateOne(filter, updateDoc, option);
+      res.json(result);
+    });
+
+    // POST or add a new user
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.json(result);
+    });
+
+    // PUT or update a user
+    app.put("/users", async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const option = { upsert: true };
+      const updateDoc = { $set: user };
+      const result = await userCollection.updateOne(filter, updateDoc, option);
       res.json(result);
     });
   } finally {
