@@ -5,11 +5,13 @@ const ObjectId = require("mongodb").ObjectId;
 const cors = require("cors");
 require("dotenv").config();
 const app = express();
+const fileUpload = require("express-fileupload");
 const port = process.env.PORT || 5000;
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 // Mongo Client
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@lawwayscluster.hxfz3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -34,6 +36,23 @@ async function run() {
     app.get("/lawyers", async (req, res) => {
       const cursor = lawyerCollection.find({});
       const result = await cursor.toArray();
+      res.json(result);
+    });
+
+    // POST or add a lawyer
+    app.post("/lawyers", async (req, res) => {
+      const name = req.body.lawyerName;
+      const details = req.body.lawyerDetails;
+      const pic = req.files.lawyerImage;
+      const picData = pic.data;
+      const encodedPic = picData.toString("base64");
+      const imageBuffer = Buffer.from(encodedPic, "base64");
+      const lawyer = {
+        lawyerName: name,
+        lawyerDetails: details,
+        lawyerImage: imageBuffer,
+      };
+      const result = await lawyerCollection.insertOne(lawyer);
       res.json(result);
     });
 
