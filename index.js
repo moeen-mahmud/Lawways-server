@@ -5,6 +5,7 @@ const ObjectId = require("mongodb").ObjectId;
 const cors = require("cors");
 require("dotenv").config();
 const app = express();
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const fileUpload = require("express-fileupload");
 const port = process.env.PORT || 5000;
 
@@ -122,6 +123,14 @@ async function run() {
       }
     });
 
+    // GET orders by id
+    app.get("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await orderCollection.findOne(query);
+      res.json(result);
+    });
+
     // DELETE a order
     app.delete("/orders/:id", async (req, res) => {
       const id = req.params.id;
@@ -188,6 +197,18 @@ async function run() {
         isAdmin = true;
       }
       res.json({ admin: isAdmin });
+    });
+
+    // Stripe payment integration
+    app.post("/create-payment-intent", async (req, res) => {
+      const paymentInfo = req.body;
+      const amount = paymentInfo.price * 100;
+      const paymentIntent = await stripe.paymentIntents.create({
+        currency: "usd",
+        amount: amount,
+        payment_method_types: ["card"],
+      });
+      res.json({ clientSecret: paymentIntent.client_secret });
     });
   } finally {
     // await client.close();
